@@ -23,7 +23,7 @@
 </style>
 <title>CS 184 Final Milestone</title>
 <body>
-<div>
+<div align = "center" width = "60%">
  <!-- align = "center" width = "60%"> -->
   <h1> CS184 final project Milestone Report</h1>
   <h2>Peijie Li, Sharon Li</h2>
@@ -55,7 +55,8 @@
 
   <h3> Overview of Program Structure </h3>
   <p> Our current implementation iterates through all particles, computes total force acting on each particle, and applies the verlet integration to update the velocity and position of each particle. </p>
-
+</div>
+<div style="margin-left: 250px" width ="40%">
   <p style="margin-left: 40px">for each simulation step do:</p>
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px">find neighbor particles that are closed enough it</p>
@@ -75,7 +76,8 @@
 
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
-
+ </div> 
+  <div align = "center" width = "60%">
   <h3> What we have achieved </h3>
   <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p+&rho;g+µ&nabla;<sub>2</sub></p>
   <p> At the beginning of each simulation iteration, we first found the neighboring particles and then use them to calculate particle's density and pressure. Particle's density is evaluated through the following equation:</p>
@@ -90,7 +92,11 @@
 
         <p align = "center" > <img src="spiky.png" width="250px" /> </p>
   <p> Lastly, we sum over all the forces, including the gravity force, and use verlet integration to compute the new position and velocity for each particle </p>
-
+  <h3>What's next</h3>
+  <p>We need to include other external forces like collision force and make this more interactive with manipulation of forces from users. From this fluid, we have a base for snow simulation to work on.</p>
+  <h3>Updated source</h3>
+  <p><a href="http://matthias-mueller-fischer.ch/publications/sca03.pdf">A paper we used for weight kernal</a></p>
+  <p><a href = "https://www.hindawi.com/journals/ijcgt/2014/806095/#EEq2">A paper for particle position based simulation</a></p>
   <h3> Short videos of our fluid simulation progress summary </h3>
   <!-- <p align="center"> -->
   <p align = "center"><video width="400" controls>

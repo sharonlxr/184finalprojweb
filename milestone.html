@@ -56,7 +56,7 @@
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
 
   <h3> What we have achieved </h3>
-  <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p+&rho;g+µ&nabla;<sub>2</sub></p>
+  <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + u&nabla;<sub>2</sub></p>
   <p> At the beginning of each simulation iteration, we first found the neighboring particles and then use them to calculate particle's density and pressure. Particle's density is evaluated through the following equation:</p>
   <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
   <p> We then use the density to calcuate pressure acting on each particles. We find the Tait equation fit to use here:</p>
@@ -86,5 +86,13 @@
 
   <h3>Presentation slides </h3>
   <p>Click <a href="https://docs.google.com/a/berkeley.edu/presentation/d/1hJyZ_UeCLq6OTjUlEDTX8XojJbHY3TRF_Anl4EsN-D0/edit?usp=sharing">here</a> to check the slides.</p>
+
+  <h3> Reflection on Progress </h3>
+  <ur>
+    <li> We have finalized some key functions, such as the kernel function and the Navier-Stokes equation, etc. </li>
+    <li> Basic fluid simulation is complete. For the next week we are going to further furnish our implementation, to make it more physically realistic. Features including the surface tension, collision force, etc. </li>
+    <li> We will be trying to build snow simulation based on our current particle-based system. A starting approach is to build the particle-based system into a grid-clustered particle-based system. </li>
+  </ur>
+
 
 </div>

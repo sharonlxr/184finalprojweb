@@ -57,7 +57,7 @@
   <h3> Overview of Program Structure </h3>
   <p> Our current implementation iterates through all particles, computes total force acting on each particle, and applies the verlet integration to update the velocity and position of each particle. </p>
 </div>
-<div style="margin-left: 250px" width ="40%">
+<!-- <div style="margin-left: 250px" width ="40%"> -->
   <p style="margin-left: 40px">for each simulation step do:</p>
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px">find neighbor particles that are closed enough it</p>
@@ -77,7 +77,7 @@
 
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
- </div> 
+ <!-- </div>  -->
   <div align = "center" width = "60%">
   <h3> What we have achieved </h3>
   <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + u&nabla;<sub>2</sub></p>

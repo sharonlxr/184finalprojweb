@@ -23,10 +23,12 @@
 </style>
 <title>CS 184 Final Milestone</title>
 <body>
-<div align = "center" width = "60%">
-  <h1> CS184 final project milestone</h1>
+<div>
+ <!-- align = "center" width = "60%"> -->
+  <h1> CS184 final project Milestone Report</h1>
   <h2>Peijie Li, Sharon Li</h2>
   <h2>3D fluids simulations and Snow Simulation</h2>
+<!-- <<<<<<< HEAD
   <p>Right now, we have successfully simulated the replusion and viscosity force through density and pressure computation.</p>
   <p>It is commonsense to know that we can not let the particle to get too close because then all the particles may migrate together and overlap and the particles around each other should exert force on each other. Therefore, we need to have circle to store all the neighbors for a single particle at each iteration/timestamp. For all those neighbors, we have to calculate all the density  and pressure. With those two measurements, we can easily to apply force on each each, in addition to the external force like gravity and collision, wind.</p>
   <p>To faciliate us with faster computation, we came up with a particle structure to store all the needed properties.</p>
@@ -34,7 +36,7 @@
       <p> glm::dvec3 p;</p>
       <p>glm::dvec3 v;</p>
       <!-- <p>  glm::dvec3 tempp;</p> -->
-       <p> glm::dvec3 force;</p>
+      <!--  <p> glm::dvec3 force;</p>
        <p> std::vector<Particle*> neighbors;</p>
        <p> double pressure;</p>
        <p> double density;
@@ -45,6 +47,66 @@
     src="https://www.youtube.com/embed/0Fj-BDsx_wg">
     </iframe></p>
     <p align = "middle">Video of short demo</p>
+
+======= --> 
+
+  <h3>Summary</h3>
+  <p>At this milestone, we have successfully implemented the simulation of simple 3D fluid. Our method is based on the Smooth Particles Hydrodynamics (SPH) to simulate fluids with free surface. To this end, we derive the viscosity and pressure force fields directly from the Navier-Stokes equation, and have tried a few smoothing kernel function to better simulate the interaction between pair of particles. </p>
+
+  <h3> Overview of Program Structure </h3>
+  <p> Our current implementation iterates through all particles, computes total force acting on each particle, and applies the verlet integration to update the velocity and position of each particle. </p>
+
+  <p style="margin-left: 40px">for each simulation step do:</p>
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">find neighbor particles that are closed enough it</p>
+  <p style="margin-left: 100px">store the list of neighbor particles</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">compute density and pressure of the particle</p>
+  <p style="margin-left: 100px">computation will use the neight particles list</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+
+  <p style="margin-left: 100px">based on the newly computed density and pressure</p>
+  <p style="margin-left: 100px">compute the pressure force computation</p>
+  <p style="margin-left: 100px"> compute the viscosity force computation</p>
+  <p style="margin-left: 100px"> compute other force (gravity)</p>
+  <p style="margin-left: 100px"> sum over all forces acting on the particle</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
+
+  <h3> What we have achieved </h3>
+  <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p+&rho;g+µ&nabla;<sub>2</sub></p>
+  <p> At the beginning of each simulation iteration, we first found the neighboring particles and then use them to calculate particle's density and pressure. Particle's density is evaluated through the following equation:</p>
+  <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
+  <p> We then use the density to calcuate pressure acting on each particles. We find the Tait equation fit to use here:</p>
+
+    <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>
+
+  <p> We hen use the density and pressure value to further compute the pressure force and viscocity force acting on each particle. The equations we use are given below, where v<sub>i</sub> is the velocity of particle i.</p>
+  <p align = "center" > <img src="forces_equation.png" width="270px" /> </p>
+  <p> We have tried a few W[eight] function to apply in the above equations. For the sake of stability, we decide to use Debrun's spiky kernel function, in favor of the cubic spline kernel function, which tends to bluid particles into clusters under high pressure. The equation for Spiky kernal function is given below: </p>
+
+        <p align = "center" > <img src="spiky.png" width="250px" /> </p>
+  <p> Lastly, we sum over all the forces, including the gravity force, and use verlet integration to compute the new position and velocity for each particle </p>
+
+  <h3> Short videos of our fluid simulation progress summary </h3>
+  <!-- <p align="center"> -->
+  <p><video width="400" controls>
+    <source src="no_bound.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video></p>
+  <p>Water falling onto an infinite plane at y = -1.5</p>
+
+  <p><video width="400" controls>
+    <source src="bounded.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+  </video></p>
+  <p>Water falling into a box.</p>
+
+  <h3>Presentation slides </h3>
+  <p>Click <a href="https://docs.google.com/a/berkeley.edu/presentation/d/1hJyZ_UeCLq6OTjUlEDTX8XojJbHY3TRF_Anl4EsN-D0/edit?usp=sharing">here</a> to check the slides.</p>
 
 
 </div>

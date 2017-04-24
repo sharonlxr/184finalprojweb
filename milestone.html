@@ -80,7 +80,7 @@
  </div> 
   <div align = "center" width = "60%">
   <h3> What we have achieved </h3>
-  <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p+&rho;g+µ&nabla;<sub>2</sub></p>
+  <p>At this milstone, we are able to simulate simple fluid movement using particle-based system. The use of particles simplies a stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + u&nabla;<sub>2</sub></p>
   <p> At the beginning of each simulation iteration, we first found the neighboring particles and then use them to calculate particle's density and pressure. Particle's density is evaluated through the following equation:</p>
   <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
   <p> We then use the density to calcuate pressure acting on each particles. We find the Tait equation fit to use here:</p>
@@ -95,9 +95,7 @@
   <p> Lastly, we sum over all the forces, including the gravity force, and use verlet integration to compute the new position and velocity for each particle </p>
   <h3>What's next</h3>
   <p>We need to include other external forces like collision force and make this more interactive with manipulation of forces from users. From this fluid, we have a base for snow simulation to work on.</p>
-  <h3>Updated source</h3>
-  <p><a href="http://matthias-mueller-fischer.ch/publications/sca03.pdf">A paper we used for weight kernal</a></p>
-  <p><a href = "https://www.hindawi.com/journals/ijcgt/2014/806095/#EEq2">A paper for particle position based simulation</a></p>
+ 
   <h3> Short videos of our fluid simulation progress summary </h3>
   <!-- <p align="center"> -->
   <p align = "center"><video width="400" controls>
@@ -118,6 +116,24 @@
 
   <h3>Presentation slides </h3>
   <p>Click <a href="https://docs.google.com/a/berkeley.edu/presentation/d/1hJyZ_UeCLq6OTjUlEDTX8XojJbHY3TRF_Anl4EsN-D0/edit?usp=sharing">here</a> to check the slides.</p>
+
+  <h3> Reflection on Progress </h3>
+  <ur>
+    <li> We have finalized some key functions, such as the kernel function and the Navier-Stokes equation, etc. </li>
+    <li> Basic fluid simulation is complete. For the next week we are going to further furnish our implementation, to make it more physically realistic. Features including the surface tension, collision force, etc. </li>
+    <li> We will be trying to build snow simulation based on our current particle-based system. A starting approach is to build the particle-based system into a grid-clustered particle-based system. </li>
+  </ur>
+
+  <h3> Updated References </h3>
+  <ur>
+    <li><a href="ttps://www.hindawi.com/journals/ijcgt/2014/806095/#B31">An Efficient Sleepy Algorithm for Particle-Based Fluids by Xiao Nie, Leiting Chen and Tao Xiang1</a> </li>
+    <li><a href="http://matthias-mueller-fischer.ch/publications/sca03.pdf">Particle-Based Fluid Simulation for Interactive Applications by Matthias Müller, David Charypar and Markus Gross</a></li>
+    <li><a href="cs184.eecs.berkeley.eduglm::dvec3">Position Based Fluids by Miles Macklin and Matthias Muller</a> </li>
+    <li><a href="http://mmacklin.com/pbf_slides.pdf">Position Based Fluid by Miles Macklin, Matthias Muller</a></li>
+    <li><a href="http://www.cs.columbia.edu/~batty/teaching/COMS6998/SPH_overview.pdf">Particle-Based Fluids by COMS6998, Columbia University</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations">Wikipedia on Navier-Stokes equation</a></li>
+  </ur>
+
 
 
 </div>

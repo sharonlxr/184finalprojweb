@@ -24,9 +24,22 @@
 <title>CS 184 Final Milestone</title>
 <body>
 <div align = "center" width = "60%">
-	<h1> CS184 final project milestone</h1>
-	<h2>Peijie Li, Sharon Li</h2>
-	<h2>3D fluids simulations and Snow Simulation</h2>
-	<a href= "./milestone.html">milestone</a>
-  <a href="https://www.w3schools.com">Milestone</a>
+  <h1> CS184 final project milestone</h1>
+  <h2>Peijie Li, Sharon Li</h2>
+  <h2>3D fluids simulations and Snow Simulation</h2>
+  <p>Right now, we have successfully simulated the replusion and viscosity force through density and pressure computation.</p>
+  <p>It is commonsense to know that we can not let the particle to get too close because then all the particles may migrate together and overlap and the particles around each other should exert force on each other. Therefore, we need to have circle to store all the neighbors for a single particle at each iteration/timestamp. For all those neighbors, we have to calculate all the density  and pressure. With those two measurements, we can easily to apply force on each each, in addition to the external force like gravity and collision, wind.</p>
+  <p>To faciliate us with faster computation, we came up with a particle structure to store all the needed properties.</p>
+   <p>struct Particle {</p>
+      <p> glm::dvec3 p;</p>
+      <p>glm::dvec3 v;</p>
+      <p>  glm::dvec3 tempp;</p>
+       <p> glm::dvec3 force;</p>
+       <p> std::vector<Particle*> neighbors;</p>
+       <p> double pressure;</p>
+       <p> double density;
+    };
+  </p>
+  <p>Normally, we should have a accelaration for verlet integration for new posistion. However, all the fluid particles are same heavy. Therefore, the force and accelaration are interchangeable.</p>
+
 </div>

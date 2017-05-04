@@ -36,9 +36,9 @@
 
 
 <h2>Technical approach</h2>
-A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
+<!-- A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
 A description of problems encountered and how you tackled them.
-A description of lessons learned.
+A description of lessons learned. -->
 
 
 <h3> Overview of Program Structure </h3>
@@ -78,12 +78,39 @@ A description of lessons learned.
     <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
     <p> where m denotes particle mass, which is always 1 in our particle-based repesentation. W is a weight kernal function and h is the cutoff distance used in defining neighbor particles.
     <p> We first use the cubic spline kernel function to estimate the density. But the limitation of this kernel is that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
+
     <p> Once we have the estimated density for each particle, we can then calculate its pressure field. <p>
       <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>
       <p> where p<sub>i</sub> is the pressure at particle i, k is a stiffness parameter to allow small density fluctuation, &rho;<sub>0</sub> is the reference density, and &gamma; is a user defined value which is usually set to 1 for SPH
     <p> Finally, we can use the equation below to calculate the pressure force for each particle: </p>
     <p align = "center" > <img src="pressure_force_eq.png" width="270px" /> </p>
     <p> where &Delta;W is the gradient of spiky kernel function. </p>
+
+    <p align = "center">
+      <video width="400" controls>
+      <source src="only_pressure_force_spline.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="400" controls>
+      <source src="only_pressure_force_spiky.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video></p>
+    </p>
+    <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [Pressure Force only] </p>
+
+
+
+    <p align = "center">
+      <video width="400" controls>
+      <source src="unstable_spline_demo.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="400" controls>
+      <source src="stable_spiky.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video></p>
+    </p>
+    <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [With Gravity and Viscosity]</p>
 
 
 <h4> 3. Viscosity Force for each particle </h4>
@@ -109,10 +136,10 @@ A description of lessons learned.
 
 
 
-  <h2>Technical approach</h2>
+  <!-- <h2>Technical approach</h2>
 A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
 A description of problems encountered and how you tackled them.
-A description of lessons learned.
+A description of lessons learned. -->
 <h2>Results</h2>
 Your final images, animations, video of your system (whichever is relevant). You can include results that you think show off what you built but that you did not have time to go over on presentation day.
 <h2>References</h2>

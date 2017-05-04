@@ -21,18 +21,95 @@
     border: 3px solid #73AD21;
 }
 </style>
-<title>CS 184 Final</title>
+<title>CS 184 Final Project</title>
 <body>
-<div align = "center" width = "60%">
+<div width = "60%">
 	<h1> CS184 final project</h1>
 	<h2>Peijie Li, Sharon Li</h2>
-	<h2>3D fluids simulations and Snow Simulation</h2>
+	<h2>Particle-based 3D fluids simulations</h2>
 	<h3><a href= "https://sharonlxr.github.io/cs184proposal/">Proposal</a></h3>
 	<h3><a href= "./milestone.html">Milestone</a></h3>
-<h2>
-Abstract</h2>
-A paragraph summary of the entire project.
+
+<h2>Abstract</h2>
+<p>In this project, we successfully implemente the simulation of 3D fluid flow using a <a href="http://mmacklin.com/pbf_sig_preprint.pdf">particle-based structure</a>. Our method is mostly based on the <a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics">Smooth Particles Hydrodynamics (SPH)</a>, a standard particle-based method for simulating the behavior of fluids. Each particle carries along some useful information about the fluid status, such as the position, density and velocity. And during the simulation, we iterate through each particle, calculate interaction between each other particle in a way that models the dynamics of a fluid. The <a href="https://www.cs.umd.edu/~mount/Indep/Steven_Dobek/dobek-stable-fluid-final-2012.pdf">Navier-Stokes Equation</a> directs us to calculate the gravity force, pressure force and viscosity force for each fluid particle. And we further extend our implementation to include extra wind force, collision force, etc. </p>
+
+
+
 <h2>Technical approach</h2>
+A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
+A description of problems encountered and how you tackled them.
+A description of lessons learned.
+
+
+<h3> Overview of Program Structure </h3>
+  <p> Our implementation maintains a loop to iterate through a particle list and compute the net force acting on each particle, and finally apply the verlet integration to update the velocity and position of each particle. The general pseudocode is shown below. Instead of computing the new positions and then correct them (if necessary) as suggested in <a href="http://mmacklin.com/pbf_sig_preprint.pdf">Particle Based Fluids</a>, we compute all the "constraints" and ensure that our computed new position for particles are all "valid and reasonable". </p>
+</div>
+<!-- <div style="margin-left: 250px" width ="40%"> -->
+  <p style="margin-left: 40px">for each simulation step do:</p>
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">find neighbor particles that are closed enough it</p>
+  <p style="margin-left: 100px">store the list of neighbor particles</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">compute density and pressure of the particle</p>
+  <p style="margin-left: 100px">computation will use the neight particles list</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+
+  <p style="margin-left: 100px">based on the newly computed density and pressure</p>
+  <p style="margin-left: 100px">compute the pressure force computation</p>
+  <p style="margin-left: 100px"> compute the viscosity force computation</p>
+  <p style="margin-left: 100px"> compute other force (gravity)</p>
+  <p style="margin-left: 100px"> sum over all forces acting on the particle</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
+
+<h3> Fluid Dynamics </h3>
+<p>We are able to simulate the fluid flow using a particle-based system because the use of particle structure simplifies the stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + &mu;&nabla;<sup>2</sup>v.</p>
+
+  <h4> 1. Finding neighbor particles </h4>
+    <p> The first thing to do, at the beginning of each iteration, is to look for the neighboring particles. Neighbor particles are defined to be the particles that are closed enough to our current particle. They are crucial because they contribute to the pressure force on the particles due to the incompressibility of fluid. We iterate through all other particles and compute the distance between each one with our current particle. If the distance is shorter than our self-defined upperbound, then we find a neighbor particle. </p>
+    <p> Each particle owns a vector<Particle *> which stores all of its neighboring particles. </p>
+
+  <h4> 2. Pressure force due to incompressibility </h4>
+    <p> To be incompressible, the fluid particles must maintain a relatively constant density within each small region. To do this, we must assure that the new position of each particle is such that the density of any region a particle resides in is as closed to rest density as possible. </p>
+    <p> To do this, we first compute the current density of each particle. This computation is done by the SPH density estimator, which uses a particle's position and its neighbor particles positions to determine the density field this particle experiences using a kernel function. The equation is shown below: </p>
+    <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
+    <p> where m denotes particle mass, which is always 1 in our particle-based repesentation. W is a weight kernal function and h is the cutoff distance used in defining neighbor particles.
+    <p> We first use the cubic spline kernel function to estimate the density. But the limitation of this kernel is that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
+    <p> Once we have the estimated density for each particle, we can then calculate its pressure field. <p>
+      <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>
+      <p> where p<sub>i</sub> is the pressure at particle i, k is a stiffness parameter to allow small density fluctuation, &rho;<sub>0</sub> is the reference density, and &gamma; is a user defined value which is usually set to 1 for SPH
+    <p> Finally, we can use the equation below to calculate the pressure force for each particle: </p>
+    <p align = "center" > <img src="pressure_force_eq.png" width="270px" /> </p>
+    <p> where &Delta;W is the gradient of spiky kernel function. </p>
+
+
+<h4> 3. Viscosity Force for each particle </h4>
+<p> The SPH rule for viscosity again yields asymmetric forces: </p>
+<p align = "center" > <img src="asymmetric_viscosity_force.png" width="270px" /> </p>
+<p> where &mu; is the viscosity of the fluid and v<sub>i</sub> is the velocity of particle i.</p>
+<p> because the velocity field varies from particle to particle. We notice that the viscosity forces are only dependent on velocity differences between two particles and not on absolute velocities, we try to symmetrize the viscosity forces by using velocity differences: </p>
+  <p align = "center" > <img src="viscosity_force_eq.png" width="270px" /> </p>
+
+
+<h4> 4. External Forces </h4>
+  <p> Our simulator supports external forces such as gravity, collision forces and forces caused by user interaction (such as wind forces and bumping forces). These forces are applied directly to the some involved particles without the use of SPH. </p>
+  <p> When particles collide with objects such as the cylinder in our examples, we simply push them out of the object and recalculate its velocity. More specifically, we reflect the velocity component that is perpendicular to the collision surface point. </p>
+
+<h3> Lesson Learned </h3>
+  <ul>
+    <li>The physics equation are accurate, but most of time they are asymmetric and directly implementing them will give unstable result. The solution is to use an estimator. There is a trade off between accuracy and stability and we try to achieve stability without losing too much accuracy.</li>
+    <li>Most estimator equations has self-defined coefficients and parameters. Despite understanding the math behind the different constraints and properties, we still have to keep changing parameters based on our reasoning through the problem and observe the outcome until the result "looks right".</li>
+    <li>The particle-based structure simplifies the stationary grid-based system, yet it still requires lots of computation. Withough a GPU, the computation time increases significantly as the number of particles increases. This is a big obstacle because it limits the number of particles we could have in our simulation.</li>
+  </ul>
+
+
+
+
+
+  <h2>Technical approach</h2>
 A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
 A description of problems encountered and how you tackled them.
 A description of lessons learned.

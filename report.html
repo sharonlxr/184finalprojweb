@@ -11,6 +11,12 @@
     font-weight: 300;
     font-family: 'Open Sans', sans-serif;
     color: #121212;
+
+    background-image: url("./1.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    /*background-color: #cccccc;*/
+}
   }
   h1, h2, h3, h4 {
     font-family: 'Source Sans Pro', sans-serif;
@@ -22,7 +28,7 @@
 }
 </style>
 <title>CS 184 Final Project</title>
-<body>
+<body >
 <div width = "60%" align = "middle">
 	<h1> CS184 final project</h1>
 	<h2>Peijie Li, Sharon Li</h2>
@@ -64,7 +70,7 @@ A description of lessons learned. -->
 
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
-
+<div>
 <h3> Fluid Dynamics </h3>
 <p>We are able to simulate the fluid flow using a particle-based system because the use of particle structure simplifies the stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + &mu;&nabla;<sup>2</sup>v.</p>
 

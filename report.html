@@ -135,7 +135,29 @@ A description of lessons learned. -->
     <iframe width="560" height="315" src="https://www.youtube.com/embed/P0lfYgNjUoo" frameborder="0" allowfullscreen></iframe>
   </p>
 Your final images, animations, video of your system (whichever is relevant). You can include results that you think show off what you built but that you did not have time to go over on presentation day.
+<h2> Interaction </h2>
+<h3> Wind </h3>
+  We implemented wind module to allow a user to provide self-defined wind force to the fluid. To do so, we enabled OpenGL's mouse and keyboard callbacks, registering them to the corresponding functions. A user enter the wind mode by pressing 'w' and then can click and drag to self-define the direction and strength of their desired force. </p>
+<h3> Bump </h3>
+  We also implement the "bump" force as a side interest. It inserts a sudden upward force to the fluid.
+<h3> Object </h3>
+  We allow the users to place a cylinder within the fluid and they can vary the height and radius of the cylinder. The cylinder will push away fluid particles. </p>
+<h3> Adding "flow" </h3>
+  There is a water inlet in our simulator as well. The users are free to add more fluid particles and can further study the parameters of particles in color mode.
+<h3> Color play </h3>
+  We furhter implement several mode in the color play. The user can use 'o' and 'p' to switch between different modes. Different modes shows different proporties of the particles: the velocity direction, the speed, the pressure force..etc through coloring the particles based on the values of those properties.
+
+
 <h2>References</h2>
+    <li><a href="https://www.hindawi.com/journals/ijcgt/2014/806095/#B31">An Efficient Sleepy Algorithm for Particle-Based Fluids by Xiao Nie, Leiting Chen and Tao Xiang1</a> </li>
+    <li><a href="http://matthias-mueller-fischer.ch/publications/sca03.pdf">Particle-Based Fluid Simulation for Interactive Applications by Matthias Müller, David Charypar and Markus Gross</a></li>
+    <li><a href="http://mmacklin.com/pbf_sig_preprint.pdf">Position Based Fluids by Miles Macklin and Matthias Muller</a> </li>
+    <li><a href="http://mmacklin.com/pbf_slides.pdf">Position Based Fluid by Miles Macklin, Matthias Muller</a></li>
+    <li><a href="http://www.cs.columbia.edu/~batty/teaching/COMS6998/SPH_overview.pdf">Particle-Based Fluids by COMS6998, Columbia University</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations">Wikipedia on Navier-Stokes equation</a></li>
+    <li><a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">Screen Space Fluid Rendering for Games</a></li>
+
+
 <h2>Contributions from each team member</h2>
 A clear description of the work contributed by each team member.
 

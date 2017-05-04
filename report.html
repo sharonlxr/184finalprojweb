@@ -26,6 +26,7 @@
 <div width = "60%">
 	<h1> CS184 final project</h1>
 	<h2>Peijie Li, Sharon Li</h2>
+<<<<<<< HEAD
 	<h2>Particle-based 3D fluids simulations</h2>
 	<h3><a href= "https://sharonlxr.github.io/cs184proposal/">Proposal</a></h3>
 	<h3><a href= "./milestone.html">Milestone</a></h3>
@@ -36,10 +37,17 @@
 
 
 <h2>Technical approach</h2>
+<p>With Newton's law, we know that the acceration is calculated via force. Therefore, we need to calculate the force excerting on each particle and update the postion via force and velocity by applying velet update. There are two major kinds force --- internal and external force.  </p>
+<h3>Internal force</h3>
+<p>Internal force refers the the force between and within all the particles. It serves like constraints for each particle (just like the spring from the cloth simulation) to depict the movement of the particles by simulating the possible constraints within a fluid object. By the internal force, the particles should look like move within fluid.  </p>
+<p>There are two internal force -- pressure force and viscosity force.</p>
+<h4>Pressure force</h4>
+<h4>Viscosity force</h4>
 A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
 A description of problems encountered and how you tackled them.
 A description of lessons learned.
 
+<<<<<<< HEAD
 
 <h3> Overview of Program Structure </h3>
   <p> Our implementation maintains a loop to iterate through a particle list and compute the net force acting on each particle, and finally apply the verlet integration to update the velocity and position of each particle. The general pseudocode is shown below. Instead of computing the new positions and then correct them (if necessary) as suggested in <a href="http://mmacklin.com/pbf_sig_preprint.pdf">Particle Based Fluids</a>, we compute all the "constraints" and ensure that our computed new position for particles are all "valid and reasonable". </p>
@@ -113,6 +121,7 @@ A description of lessons learned.
 A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
 A description of problems encountered and how you tackled them.
 A description of lessons learned.
+
 <h2>Results</h2>
 Your final images, animations, video of your system (whichever is relevant). You can include results that you think show off what you built but that you did not have time to go over on presentation day.
 <h2>References</h2>

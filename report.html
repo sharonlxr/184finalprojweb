@@ -122,6 +122,12 @@ A description of lessons learned. -->
 <h4> 4. External Forces </h4>
   <p> Our simulator supports external forces such as gravity, collision forces and forces caused by user interaction (such as wind forces and bumping forces). These forces are applied directly to the some involved particles without the use of SPH. </p>
   <p> When particles collide with objects such as the cylinder in our examples, we simply push them out of the object and recalculate its velocity. More specifically, we reflect the velocity component that is perpendicular to the collision surface point. </p>
+<h4> 5. Verlet Integration </h5>
+  <p>After we have computed the net force exerted on one particle, we can then use the Newton's Law to compute the velocity of the particle:</p>
+  <p align="center"> Force = mass * acceleration </p>
+  <p align="center"> Velocity<sub>next</sub> = Velocity<sub>current</sub> * acceleration * dt</p>
+  <p align="center"> Position<sub>next</sub> = Position<sub>current</sub> + Velocity<sub>current</sub> * dt + 0.5 * acceleration * dt<sup>2</sup> </p>
+  <p> where the mass for each particle is assumed to be always 1. </p>
 
 <h3> Lesson Learned </h3>
   <ul>
@@ -138,10 +144,25 @@ Your final images, animations, video of your system (whichever is relevant). You
 <h2> Interaction </h2>
 <h3> Wind </h3>
   We implemented wind module to allow a user to provide self-defined wind force to the fluid. To do so, we enabled OpenGL's mouse and keyboard callbacks, registering them to the corresponding functions. A user enter the wind mode by pressing 'w' and then can click and drag to self-define the direction and strength of their desired force. </p>
+  <p align = "center">
+      <video width="300" controls>
+      <source src="wind.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="300" controls>
+      <source src="wind_bump.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="300" controls>
+      <source src="wind_cylinder.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+    </p>
+
 <h3> Bump </h3>
   We also implement the "bump" force as a side interest. It inserts a sudden upward force to the fluid when the user press 'u'. 
   <p align = "center">
-      <video width="400" controls>
+      <video width="300" controls>
       <source src="bump_small.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
       </video>
@@ -153,7 +174,7 @@ Your final images, animations, video of your system (whichever is relevant). You
 <h3> Object </h3>
   We allow the users to place a cylinder within the fluid and the cylinder will push away fluid particles. The users can vary the height of the cylinder with 'L' to increase and 'l' decrease, and radius of the cylinder with 'D' and 'd'.</p>
   <p align = "center">
-      <video width="400" controls>
+      <video width="300" controls>
       <source src="object.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
       </video>
@@ -161,13 +182,27 @@ Your final images, animations, video of your system (whichever is relevant). You
 <h3> Adding "flow" </h3>
   There is a water inlet in our simulator as well. The users are free to add more fluid particles with keyboard 'a' and can further study the parameters of particles in color mode.
   <p align = "center">
-      <video width="400" controls>
+      <video width="300" controls>
       <source src="add_flow.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
       </video>
     </p>
 <h3> Color play </h3>
-  We furhter implement several mode in the color play. The user can use 'o' and 'p' to switch between different modes. Different modes shows different proporties of the particles: the velocity direction, the speed, the pressure force..etc through coloring the particles based on the values of those properties.
+  We furhter implement several mode in the color play, which display certain property of the particles through colorings, spefular lightings and shinness. The user can use 'o' and 'p' to switch between different modes. Different modes shows different proporties of the particles: the velocity direction, the speed, the pressure force..etc through coloring the particles based on the values of those properties.
+  <p align = "center">
+      <video width="300" controls>
+      <source src="color_direction.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="300" controls>
+      <source src="color_specular.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <video width="300" controls>
+      <source src="color_shiness.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+    </p>
 
 
 <h2>References</h2>

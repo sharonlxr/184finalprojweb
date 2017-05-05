@@ -70,7 +70,7 @@ A description of lessons learned. -->
 
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
-<div>
+<div align = "middle">
 <h3> Fluid Dynamics </h3>
 <p>We are able to simulate the fluid flow using a particle-based system because the use of particle structure simplifies the stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + &mu;&nabla;<sup>2</sup>v.</p>
 
@@ -93,26 +93,46 @@ A description of lessons learned. -->
     <p> where &Delta;W is the gradient of spiky kernel function. </p>
 
     <p align = "center">
-      <video width="400" controls>
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/f5-jXbOz5QI" align="center">
+      </iframe></p>
+      <p>only pressure force applied via spline kernel</p>
+      <!-- https://youtu.be/f5-jXbOz5QI -->
+      <!-- <video width="400" controls>
       <source src="only_pressure_force_spline.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="320" controls>
+      </video> -->
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/uzF0HqRUfzw" align="center">
+      </iframe></p>
+      <p>only pressure force applied via spiky kernel</p>
+      <!-- https://youtu.be/uzF0HqRUfzw -->
+     <!--  <video width="320" controls>
       <source src="only_pressure_force_spiky.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
     <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [Pressure Force only] </p>
 
     <p align = "center">
-      <video width="400" controls>
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/zEug47wj2JY" align="center">
+      </iframe></p>
+      <p>unstable particles with spline</p>
+      <!-- https://youtu.be/zEug47wj2JY -->
+    <!--   <video width="400" controls>
       <source src="unstable_spline_demo.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="390" controls>
+      </video> -->
+      <!-- https://youtu.be/rSmZleXZILU -->
+       <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/rSmZleXZILU" align="center">
+      </iframe></p>
+      <p>stable particles with spiky</p>
+    <!--   <video width="390" controls>
       <source src="stable_spiky.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
     <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [With Gravity and Viscosity]</p>
 
@@ -151,73 +171,130 @@ Your final images, animations, video of your system (whichever is relevant). You
 <h3> Wind </h3>
   We implemented wind module to allow a user to provide self-defined wind force to the fluid. To do so, we enabled OpenGL's mouse and keyboard callbacks, registering them to the corresponding functions. A user enter the wind mode by pressing 'w' and then can click and drag to self-define the direction and strength of their desired force. </p>
   <p align = "center">
-      <video width="300" controls>
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/20gc39Em-is" align="center">
+      </iframe></p>
+      <p>wind</p>
+
+    <!-- https://youtu.be/20gc39Em-is -->
+     <!--  <video width="300" controls>
       <source src="wind.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="300" controls>
+      </video> -->
+       <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/cSDp37ymV-s" align="center">
+      </iframe></p>
+      <p>wind with bump</p>
+      <!-- https://youtu.be/cSDp37ymV-s -->
+    <!--   <video width="300" controls>
       <source src="wind_bump.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="300" controls>
+      </video> -->
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/MIgGjo--b98" align="center">
+      </iframe></p>
+      <p>wind with cylinder</p>
+      <!-- https://youtu.be/MIgGjo--b98 -->
+     <!--  <video width="300" controls>
       <source src="wind_cylinder.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
 
 <h3> Bump </h3>
   We also implement the "bump" force as a side interest. It inserts a sudden upward force to the fluid when the user press 'u'. 
   <p align = "center">
-      <video width="300" controls>
+     <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/I6pJtQxdLl0" align="center">
+      </iframe></p>
+      <p>small bump</p>
+    <!-- https://youtu.be/I6pJtQxdLl0 -->
+    <!--   <video width="300" controls>
       <source src="bump_small.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="320" controls>
+      </video> -->
+<!-- https://youtu.be/GIVmhxCUxuw -->
+<p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/GIVmhxCUxuw" align="center">
+      </iframe></p>
+      <p>large bump</p>
+   <!--    <video width="320" controls>
       <source src="bump_large.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
 <h3> Object </h3>
   We allow the users to place a cylinder within the fluid and the cylinder will push away fluid particles. The users can vary the height of the cylinder with 'L' to increase and 'l' decrease, and radius of the cylinder with 'D' and 'd'.</p>
   <p align = "center">
-      <video width="300" controls>
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/kLY226ROq1U" align="center">
+      </iframe></p>
+      <p>object</p>
+    <!-- https://youtu.be/kLY226ROq1U -->
+    <!--   <video width="300" controls>
       <source src="object.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
 <h3> Adding "flow" </h3>
   There is a water inlet in our simulator as well. The users are free to add more fluid particles with keyboard 'a' and can further study the parameters of particles in color mode.
   <p align = "center">
-      <video width="300" controls>
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/sah-9OsDFgo" align="center">
+      </iframe></p>
+      <p>add flow</p>
+    <!-- https://youtu.be/sah-9OsDFgo -->
+     <!--  <video width="300" controls>
       <source src="add_flow.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
     </p>
 <h3> Color play </h3>
   We furhter implement several mode in the color play, which display certain property of the particles through colorings, spefular lightings and shinness. The user can use 'o' and 'p' to switch between different modes. Different modes shows different proporties of the particles: the velocity direction, the speed, the pressure force..etc through coloring the particles based on the values of those properties.
   <p align = "center">
-      <video width="300" controls>
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/sJhm8AF-kcg" align="center">
+      </iframe></p>
+      <p>color for direction</p>
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/HgvT7o15NJU" align="center">
+      </iframe></p>
+      <p>specular for velocity</p>
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/8eCJ_Hq0MlA" align="center">
+      </iframe></p>
+      <p>shiness for velocity</p>
+    <!-- https://youtu.be/sJhm8AF-kcg -->
+   <!--    <video width="300" controls>
+
       <source src="color_direction.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
-      <video width="300" controls>
+      </video> -->
+      <!-- https://youtu.be/HgvT7o15NJU -->
+    <!--   <video width="300" controls>
       <source src="color_specular.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
       </video>
-      <video width="300" controls>
+      <!-- https://youtu.be/8eCJ_Hq0MlA -->
+     <!--  <video width="300" controls>
       <source src="color_shiness.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> --> -->
     </p>
 
 <h3>Different coeffiences assignment to different force</h3>
 <p>When we first start this project, it took some work to find the correct matching coeffiences for different force to make it look like natural fluid. However, if we abjust some coeffiences, it can turn out to be some other fluids or other movements.Therefore, abjustment on coeffience can be applied to generalize this project to simulate a variety of fluids and movements.</p>
 <p>If we increase the pressure force coeffiences, we can get something looks like the fluid is explored internally rather than simply naturally falling down.</p>
  <p align = "center">
- <video width="300" controls>
+  <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/H-NKs2a2F3w" align="center">
+      </iframe></p>
+      <p>increase pressure ratio for explosion</p>
+  <!-- https://youtu.be/H-NKs2a2F3w -->
+<!--  <video width="300" controls>
       <source src="explosion.mp4" type="video/mp4">
       Your browser does not support HTML5 video.
-      </video>
+      </video> -->
   </p>
 <h2>References</h2>
     <li><a href="https://www.hindawi.com/journals/ijcgt/2014/806095/#B31">An Efficient Sleepy Algorithm for Particle-Based Fluids by Xiao Nie, Leiting Chen and Tao Xiang1</a> </li>

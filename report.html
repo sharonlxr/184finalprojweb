@@ -35,7 +35,7 @@
 	<h2>Particle-based 3D fluids simulations</h2>
 	<h3><a href= "https://sharonlxr.github.io/cs184proposal/">Proposal</a></h3>
 	<h3><a href= "./milestone.html">Milestone</a></h3>
-
+</div>
 <h2>Abstract</h2>
 <p>In this project, we successfully implemente the simulation of 3D fluid flow using a <a href="http://mmacklin.com/pbf_sig_preprint.pdf">particle-based structure</a>. Our method is mostly based on the <a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics">Smooth Particles Hydrodynamics (SPH)</a>, a standard particle-based method for simulating the behavior of fluids. Each particle carries along some useful information about the fluid status, such as the position, density and velocity. And during the simulation, we iterate through each particle, calculate interaction between each other particle in a way that models the dynamics of a fluid. The <a href="https://www.cs.umd.edu/~mount/Indep/Steven_Dobek/dobek-stable-fluid-final-2012.pdf">Navier-Stokes Equation</a> directs us to calculate the gravity force, pressure force and viscosity force for each fluid particle. And we further extend our implementation to include extra wind force, collision force, etc. </p>
 
@@ -70,7 +70,7 @@ A description of lessons learned. -->
 
   <p style="margin-left: 70px">for each particle do:</p>
   <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
-<div align = "middle" width="60%">
+<div align = "left" width="60%">
 <h3> Fluid Dynamics </h3>
 <p>We are able to simulate the fluid flow using a particle-based system because the use of particle structure simplifies the stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + &mu;&nabla;<sup>2</sup>v.</p>
 

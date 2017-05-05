@@ -83,7 +83,9 @@ A description of lessons learned. -->
     <p> To do this, we first compute the current density of each particle. This computation is done by the SPH density estimator, which uses a particle's position and its neighbor particles positions to determine the density field this particle experiences using a kernel function. The equation is shown below: </p>
     <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
     <p> where m denotes particle mass, which is always 1 in our particle-based repesentation. W is a weight kernal function and h is the cutoff distance used in defining neighbor particles.
-    <p> We first use the cubic spline kernel function to estimate the density. But the limitation of this kernel is that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
+    <p> We first use the cubic spline kernel function (also known as the poly6 kernel) to estimate the density. This kernel is efficient in distance computation, due to the use of r<sup>2</sup> term. It works fine in density computation, but the limitation of this kernel arises in estimating pressure, that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
+    <p align = "center" > <img src="poly_eq.png" width="250px" /> </p>
+    <p align = "center" > <img src="spiky_eq.png" width="250px" /> </p>
 
     <p> Once we have the estimated density for each particle, we can then calculate its pressure field. <p>
       <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>

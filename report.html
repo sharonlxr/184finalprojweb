@@ -84,14 +84,14 @@ A description of lessons learned. -->
     <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
     <p> where m denotes particle mass, which is always 1 in our particle-based repesentation. W is a weight kernal function and h is the cutoff distance used in defining neighbor particles.
     <p> We first use the cubic spline kernel function (also known as the poly6 kernel) to estimate the density. This kernel is efficient in distance computation, due to the use of r<sup>2</sup> term. It works fine in density computation, but the limitation of this kernel arises in estimating pressure, that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
-    <p align = "center" > <img src="poly_eq.png" width="250px" /> </p>
-    <p align = "center" > <img src="spiky_eq.png" width="250px" /> </p>
+    <p align = "center" > <img src="./poly_eq.png" width="250px" /> </p>
+    <p align = "center" > <img src="./spiky_eq.png" width="250px" /> </p>
 
     <p> Once we have the estimated density for each particle, we can then calculate its pressure field. <p>
-      <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>
+      <p align = "center" > <img src="./pressure_equation.png" width="150px" /> </p>
       <p> where p<sub>i</sub> is the pressure at particle i, k is a stiffness parameter to allow small density fluctuation, &rho;<sub>0</sub> is the reference density, and &gamma; is a user defined value which is usually set to 1 for SPH
     <p> Finally, we can use the equation below to calculate the pressure force for each particle: </p>
-    <p align = "center" > <img src="pressure_force_eq.png" width="270px" /> </p>
+    <p align = "center" > <img src="./pressure_force_eq.png" width="270px" /> </p>
     <p> where &Delta;W is the gradient of spiky kernel function. </p>
 
     <p align = "center">
@@ -141,10 +141,10 @@ A description of lessons learned. -->
 
 <h4> 3. Viscosity Force for each particle </h4>
 <p> The SPH rule for viscosity again yields asymmetric forces: </p>
-<p align = "center" > <img src="asymmetric_viscosity_force.png" width="270px" /> </p>
+<p align = "center" > <img src="./asymmetric_viscosity_force.png" width="270px" /> </p>
 <p> where &mu; is the viscosity of the fluid and v<sub>i</sub> is the velocity of particle i.</p>
 <p> because the velocity field varies from particle to particle. We notice that the viscosity forces are only dependent on velocity differences between two particles and not on absolute velocities, we try to symmetrize the viscosity forces by using velocity differences: </p>
-  <p align = "center" > <img src="viscosity_force_eq.png" width="270px" /> </p>
+  <p align = "center" > <img src="./viscosity_force_eq.png" width="270px" /> </p>
 
 
 <h4> 4. External Forces </h4>

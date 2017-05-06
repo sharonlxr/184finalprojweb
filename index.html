@@ -1,4 +1,4 @@
-<!-- hello world -->
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -11,6 +11,12 @@
     font-weight: 300;
     font-family: 'Open Sans', sans-serif;
     color: #121212;
+
+    /*background-image: url("./1.png");*/
+    background-repeat: no-repeat;
+    background-size: cover;
+    /*background-color: #cccccc;*/
+}
   }
   h1, h2, h3, h4 {
     font-family: 'Source Sans Pro', sans-serif;
@@ -21,58 +27,290 @@
     border: 3px solid #73AD21;
 }
 </style>
-<title>CS 184 Final</title>
-<body>
-<div align = "center" width = "60%">
+<title>CS 184 Final Project</title>
+<body >
+<div width = "60%" align = "middle">
 	<h1> CS184 final project</h1>
 	<h2>Peijie Li, Sharon Li</h2>
-	<h2>3D fluids simulations and Snow Simulation</h2>
+	<h2>Particle-based 3D fluids simulations</h2>
 	<h3><a href= "https://sharonlxr.github.io/cs184proposal/">Proposal</a></h3>
 	<h3><a href= "./milestone.html">Milestone</a></h3>
-  <h3><a href= "./report.html">Report</a></h3>
+</div>
+<h2>Abstract</h2>
+<p>In this project, we successfully implemente the simulation of 3D fluid flow using a <a href="http://mmacklin.com/pbf_sig_preprint.pdf">particle-based structure</a>. Our method is mostly based on the <a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics">Smooth Particles Hydrodynamics (SPH)</a>, a standard particle-based method for simulating the behavior of fluids. Each particle carries along some useful information about the fluid status, such as the position, density and velocity. And during the simulation, we iterate through each particle, calculate interaction between each other particle in a way that models the dynamics of a fluid. The <a href="https://www.cs.umd.edu/~mount/Indep/Steven_Dobek/dobek-stable-fluid-final-2012.pdf">Navier-Stokes Equation</a> directs us to calculate the gravity force, pressure force and viscosity force for each fluid particle. And we further extend our implementation to include extra wind force, collision force, etc. </p>
 
 
 
+<h2>Technical approach</h2>
+<!-- A 1-2 page summary of your technical approach, techniques used, algorithms implemented, etc. (use references to papers or other resources for further detail). Highlight how your approach varied from the references used (did you implement a subset, or did you change or enhance anything), the unique decisions you made and why.
+A description of problems encountered and how you tackled them.
+A description of lessons learned. -->
 
 
-  	
+<h3> Overview of Program Structure </h3>
+  <p> Our implementation maintains a loop to iterate through a particle list and compute the net force acting on each particle, and finally apply the verlet integration to update the velocity and position of each particle. The general pseudocode is shown below. Instead of computing the new positions and then correct them (if necessary) as suggested in <a href="http://mmacklin.com/pbf_sig_preprint.pdf">Particle Based Fluids</a>, we compute all the "constraints" and ensure that our computed new position for particles are all "valid and reasonable". </p>
+</div>
+<!-- <div style="margin-left: 250px" width ="40%"> -->
+  <p style="margin-left: 40px">for each simulation step do:</p>
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">find neighbor particles that are closed enough it</p>
+  <p style="margin-left: 100px">store the list of neighbor particles</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px">compute density and pressure of the particle</p>
+  <p style="margin-left: 100px">computation will use the neight particles list</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+
+  <p style="margin-left: 100px">based on the newly computed density and pressure</p>
+  <p style="margin-left: 100px">compute the pressure force computation</p>
+  <p style="margin-left: 100px"> compute the viscosity force computation</p>
+  <p style="margin-left: 100px"> compute other force (gravity)</p>
+  <p style="margin-left: 100px"> sum over all forces acting on the particle</p>
+
+  <p style="margin-left: 70px">for each particle do:</p>
+  <p style="margin-left: 100px"> verlet time integration to udpate velocity and position </p>
+<div align = "left" width="60%">
+<h3> Fluid Dynamics </h3>
+<p>We are able to simulate the fluid flow using a particle-based system because the use of particle structure simplifies the stationary grid-based system, as we assume each particle has constant mass and thus guarantee mass conservation. It further simplifies the Navier-Stokes equations, eliminating some complex terms such as the convective term "v*&nabla;v". Thus, using the particle based system, there are only three terms left for the Navier-Stokes equations: force = -&nabla;p + &rho;g + &mu;&nabla;<sup>2</sup>v.</p>
+
+  <h4> 1. Finding neighbor particles </h4>
+    <p> The first thing to do, at the beginning of each iteration, is to look for the neighboring particles. Neighbor particles are defined to be the particles that are closed enough to our current particle. They are crucial because they contribute to the pressure force on the particles due to the incompressibility of fluid. We iterate through all other particles and compute the distance between each one with our current particle. If the distance is shorter than our self-defined upperbound, then we find a neighbor particle. </p>
+    <p> Each particle owns a vector<Particle *> which stores all of its neighboring particles. </p>
+
+  <h4> 2. Pressure force due to incompressibility </h4>
+    <p> To be incompressible, the fluid particles must maintain a relatively constant density within each small region. To do this, we must assure that the new position of each particle is such that the density of any region a particle resides in is as closed to rest density as possible. </p>
+    <p> To do this, we first compute the current density of each particle. This computation is done by the SPH density estimator, which uses a particle's position and its neighbor particles positions to determine the density field this particle experiences using a kernel function. The equation is shown below: </p>
+    <p align = "center" > <img src="density_equation.png" width="150px" /> </p>
+    <p> where m denotes particle mass, which is always 1 in our particle-based repesentation. W is a weight kernal function and h is the cutoff distance used in defining neighbor particles.
+    <p> We first use the cubic spline kernel function (also known as the poly6 kernel) to estimate the density. This kernel is efficient in distance computation, due to the use of r<sup>2</sup> term. It works fine in density computation, but the limitation of this kernel arises in estimating pressure, that particles tend to build clusters under high pressure. As particles get very close to each other, the repulsion force vanishes because the gradient of the kernel approaches zero at the center. With a few tries, we end up using Debrun's spiky kernel, which generates a non vanishing gradient near the center and provides better stability. </p>
+    <p align = "center" > <img src="poly_eq.png" width="250px" /> </p>
+    <p align = "center" > <img src="spiky_eq.png" width="250px" /> </p>
+
+    <p> Once we have the estimated density for each particle, we can then calculate its pressure field. <p>
+      <p align = "center" > <img src="pressure_equation.png" width="150px" /> </p>
+      <p> where p<sub>i</sub> is the pressure at particle i, k is a stiffness parameter to allow small density fluctuation, &rho;<sub>0</sub> is the reference density, and &gamma; is a user defined value which is usually set to 1 for SPH
+    <p> Finally, we can use the equation below to calculate the pressure force for each particle: </p>
+    <p align = "center" > <img src="pressure_force_eq.png" width="270px" /> </p>
+    <p> where &Delta;W is the gradient of spiky kernel function. </p>
+
+    <p align = "center">
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/f5-jXbOz5QI" align="center">
+      </iframe></p>
+      <p>only pressure force applied via spline kernel</p>
+      <!-- https://youtu.be/f5-jXbOz5QI -->
+      <!-- <video width="400" controls>
+      <source src="only_pressure_force_spline.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/uzF0HqRUfzw" align="center">
+      </iframe></p>
+      <p>only pressure force applied via spiky kernel</p>
+      <!-- https://youtu.be/uzF0HqRUfzw -->
+     <!--  <video width="320" controls>
+      <source src="only_pressure_force_spiky.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+    <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [Pressure Force only] </p>
+
+    <p align = "center">
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/zEug47wj2JY" align="center">
+      </iframe></p>
+      <p>unstable particles with spline</p>
+      <!-- https://youtu.be/zEug47wj2JY -->
+    <!--   <video width="400" controls>
+      <source src="unstable_spline_demo.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+      <!-- https://youtu.be/rSmZleXZILU -->
+       <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/rSmZleXZILU" align="center">
+      </iframe></p>
+      <p>stable particles with spiky</p>
+    <!--   <video width="390" controls>
+      <source src="stable_spiky.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+    <p align = "center">Cubic Spline Kernel and Debrun's Spiky Kernel Function [With Gravity and Viscosity]</p>
+
+
+<h4> 3. Viscosity Force for each particle </h4>
+<p> The SPH rule for viscosity again yields asymmetric forces: </p>
+<p align = "center" > <img src="asymmetric_viscosity_force.png" width="270px" /> </p>
+<p> where &mu; is the viscosity of the fluid and v<sub>i</sub> is the velocity of particle i.</p>
+<p> because the velocity field varies from particle to particle. We notice that the viscosity forces are only dependent on velocity differences between two particles and not on absolute velocities, we try to symmetrize the viscosity forces by using velocity differences: </p>
+  <p align = "center" > <img src="viscosity_force_eq.png" width="270px" /> </p>
+
+
+<h4> 4. External Forces </h4>
+  <p> Our simulator supports external forces such as gravity, collision forces and forces caused by user interaction (such as wind forces and bumping forces). These forces are applied directly to the some involved particles without the use of SPH. </p>
+  <p> When particles collide with objects such as the cylinder in our examples, we simply push them out of the object and recalculate its velocity. More specifically, we reflect the velocity component that is perpendicular to the collision surface point. </p>
+<h4> 5. Verlet Integration </h5>
+  <p>After we have computed the net force exerted on one particle, we can then use the Newton's Law to compute the velocity of the particle:</p>
+  <p align="center"> Force = mass * acceleration </p>
+  <p align="center"> Velocity<sub>next</sub> = Velocity<sub>current</sub> * acceleration * dt</p>
+  <p align="center"> Position<sub>next</sub> = Position<sub>current</sub> + Velocity<sub>current</sub> * dt + 0.5 * acceleration * dt<sup>2</sup> </p>
+  <p> where the mass for each particle is assumed to be always 1. </p>
+
+<h3> Lesson Learned </h3>
+  <ul>
+    <li>The physics equation are accurate, but most of time they are asymmetric and directly implementing them will give unstable result. The solution is to use an estimator. There is a trade off between accuracy and stability and we try to achieve stability without losing too much accuracy.</li>
+    <li>Most estimator equations has self-defined coefficients and parameters. Despite understanding the math behind the different constraints and properties, we still have to keep changing parameters based on our reasoning through the problem and observe the outcome until the result "looks right".</li>
+    <li>The particle-based structure simplifies the stationary grid-based system, yet it still requires lots of computation. Withough a GPU, the computation time increases significantly as the number of particles increases. This is a big obstacle because it limits the number of particles we could have in our simulation.</li>
+  </ul>
+
+<h2>Results</h2>
+  <p align="center">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/P0lfYgNjUoo" frameborder="0" allowfullscreen></iframe>
+  </p>
+
+<h2> Interaction </h2>
+<h3> Wind </h3>
+  We implemented wind module to allow a user to provide self-defined wind force to the fluid. To do so, we enabled OpenGL's mouse and keyboard callbacks, registering them to the corresponding functions. A user enter the wind mode by pressing 'w' and then can click and drag to self-define the direction and strength of their desired force. </p>
+  <p align = "center">
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/20gc39Em-is" align="center">
+      </iframe></p>
+      <p align= "middle">wind</p>
+
+    <!-- https://youtu.be/20gc39Em-is -->
+     <!--  <video width="300" controls>
+      <source src="wind.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+       <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/cSDp37ymV-s" align="center">
+      </iframe></p>
+      <p align= "middle">wind with bump</p>
+      <!-- https://youtu.be/cSDp37ymV-s -->
+    <!--   <video width="300" controls>
+      <source src="wind_bump.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+        <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/MIgGjo--b98" align="center">
+      </iframe></p>
+      <p align= "middle">wind with cylinder</p>
+      <!-- https://youtu.be/MIgGjo--b98 -->
+     <!--  <video width="300" controls>
+      <source src="wind_cylinder.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+
+<h3> Bump </h3>
+  We also implement the "bump" force as a side interest. It inserts a sudden upward force to the fluid when the user press 'u'. 
+  <p align = "center">
+     <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/I6pJtQxdLl0" align="center">
+      </iframe></p>
+      <p align= "middle">small bump</p>
+    <!-- https://youtu.be/I6pJtQxdLl0 -->
+    <!--   <video width="300" controls>
+      <source src="bump_small.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+<!-- https://youtu.be/GIVmhxCUxuw -->
+<p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/GIVmhxCUxuw" align="center">
+      </iframe></p>
+      <p align= "middle">large bump</p>
+   <!--    <video width="320" controls>
+      <source src="bump_large.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+<h3> Object </h3>
+  We allow the users to place a cylinder within the fluid and the cylinder will push away fluid particles. The users can vary the height of the cylinder with 'L' to increase and 'l' decrease, and radius of the cylinder with 'D' and 'd'.</p>
+  <p align = "center">
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/kLY226ROq1U" align="center">
+      </iframe></p>
+      <p align= "middle">object</p>
+    <!-- https://youtu.be/kLY226ROq1U -->
+    <!--   <video width="300" controls>
+      <source src="object.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+<h3> Adding "flow" </h3>
+  There is a water inlet in our simulator as well. The users are free to add more fluid particles with keyboard 'a' and can further study the parameters of particles in color mode.
+  <p align = "center">
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/sah-9OsDFgo" align="center">
+      </iframe></p>
+      <p align= "middle">add flow</p>
+    <!-- https://youtu.be/sah-9OsDFgo -->
+     <!--  <video width="300" controls>
+      <source src="add_flow.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+    </p>
+<h3> Color play </h3>
+  We furhter implement several mode in the color play, which display certain property of the particles through colorings, spefular lightings and shinness. The user can use 'o' and 'p' to switch between different modes. Different modes shows different proporties of the particles: the velocity direction, the speed, the pressure force..etc through coloring the particles based on the values of those properties.
+  <p align = "center">
+    <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/sJhm8AF-kcg" align="center">
+      </iframe></p>
+      <p align= "middle">color for direction</p>
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/HgvT7o15NJU" align="center">
+      </iframe></p>
+      <p align= "middle">specular for velocity</p>
+      <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/8eCJ_Hq0MlA" align="center">
+      </iframe></p>
+      <p align= "middle">shiness for velocity</p>
+    <!-- https://youtu.be/sJhm8AF-kcg -->
+   <!--    <video width="300" controls>
+
+      <source src="color_direction.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+      <!-- https://youtu.be/HgvT7o15NJU -->
+    <!--   <video width="300" controls>
+      <source src="color_specular.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video>
+      <!-- https://youtu.be/8eCJ_Hq0MlA -->
+     <!--  <video width="300" controls>
+      <source src="color_shiness.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> --> -->
+    </p>
+
+<h3>Different coeffiences assignment to different force</h3>
+<p>When we first start this project, it took some work to find the correct matching coeffiences for different force to make it look like natural fluid. However, if we abjust some coeffiences, it can turn out to be some other fluids or other movements.Therefore, abjustment on coeffience can be applied to generalize this project to simulate a variety of fluids and movements.</p>
+<p>If we increase the pressure force coeffiences, we can get something looks like the fluid is explored internally rather than simply naturally falling down.</p>
+ <p align = "center">
+  <p align="center"><iframe width="420" height="315"
+      src="https://www.youtube.com/embed/H-NKs2a2F3w" align="center">
+      </iframe></p>
+      <p align= "middle">increase pressure ratio for explosion</p>
+  <!-- https://youtu.be/H-NKs2a2F3w -->
+<!--  <video width="300" controls>
+      <source src="explosion.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+      </video> -->
+  </p>
+<h2>References</h2>
+    <li><a href="https://www.hindawi.com/journals/ijcgt/2014/806095/#B31">An Efficient Sleepy Algorithm for Particle-Based Fluids by Xiao Nie, Leiting Chen and Tao Xiang1</a> </li>
+    <li><a href="http://matthias-mueller-fischer.ch/publications/sca03.pdf">Particle-Based Fluid Simulation for Interactive Applications by Matthias Müller, David Charypar and Markus Gross</a></li>
+    <li><a href="http://mmacklin.com/pbf_sig_preprint.pdf">Position Based Fluids by Miles Macklin and Matthias Muller</a> </li>
+    <li><a href="http://mmacklin.com/pbf_slides.pdf">Position Based Fluid by Miles Macklin, Matthias Muller</a></li>
+    <li><a href="http://www.cs.columbia.edu/~batty/teaching/COMS6998/SPH_overview.pdf">Particle-Based Fluids by COMS6998, Columbia University</a></li>
+    <li><a href="https://en.wikipedia.org/wiki/Navier%E2%80%93Stokes_equations">Wikipedia on Navier-Stokes equation</a></li>
+    <li><a href="http://developer.download.nvidia.com/presentations/2010/gdc/Direct3D_Effects.pdf">Screen Space Fluid Rendering for Games</a></li>
+
+
+<h2>Contributions from each team member</h2>
+<p>Peijie Li: research, building up particles structure system, internal force calculation, verlet update, color interaction, web report</p>
+<p>Sharon LI: building up particles structure and system, external force calculation, pressure and density calculation, wind and object interaction, web report</p>
+<!-- A clear description of the work contributed by each team member. -->
 
 </div>
-<!-- <div align = "center" width = "60%"> -->
-
-3.1A Milestone Status Report Webpage (CS184 Students)
-
-Create a short webpage for your milestone report. This should be about 1 page long if printed. You should briefly summarize what you have accomplished, preliminary results, reflect on progress relative to your plan, and update your work plan as appropriate. You must submit this milestone deliverable (and the final deliverable) on a persistent website that you can choose to keep up after class if you wish to present this work in your portfolio.
-
-3.1B Milestone Status Report Webpage (CS284A Students)
-
-If you are a CS284A student, read Section 5.1B for a description of how you will format your paper as a journal-style paper. For the milestone, download and familiarize yourself with the ACM SIGGRAPH paper template (you are encouraged to try using LaTeX). Format your milestone report in this template.
-
-3.2 Milestone Video
-
-A short 1-minute video summarizing your progress. The style of this milestone video is quite free. One idea is to make several slides with narration, showing the general idea and current progress. You can include some screenshots of code and images. You can also run your current program and record the screen to show us what is happening. Keep in mind that your video submission should clearly explain and demonstrate to us what you have achieved so far. Link this video on your webpage.
-
-3.3 Presentation slides
-
-2-3 slides summarizing your project and current progress. Link these on your webpage too.
-
-3.4 Milestone Submission
-	
-
-<!-- Title, Summary and Team Members
-Provide us a descriptive title, 2-3 sentences that summarize your project, and list your two team members.
-Problem Description
-Here you should provide the context for your idea. Describe the problem that you are trying to solve, why it is important, where it is challenging. Give us a general idea on how you are going to solve it.
-Goals and Deliverables
-This is the most important part of your proposal. You should carefully think through what you are trying to accomplish, what results you are going for, and why you think you can accomplish those goals. For example:
-Since this is a graphics class you will likely define the kind of images you will create (e.g. including a photo of a new lighting effect you will simulate).
-If you are working on an interactive system, describe what demo you will create.
-Define how you will measure the quality / performance of your system (e.g. graphs showing speedup, or quantifying accuracy). It may not be possible to define precise target metrics at this time, but we encourage you to try.
-What questions do you plan to answer with your analysis?
-You should break this section into two parts: (1) what you plan to deliver, and (2) what you hope to deliver. In (1), describe what you believe you must accomplish to have a successful project and achieve the grade you expect (i.e. your baseline plan -- planning for some unexpected problems would make sense). In (2), describe what you hope to achieve if things go well and you get ahead of schedule (your aspirational plan).
-Schedule
-In this section you should organize and plan the tasks and subtasks that your team will execute. Since presentations are ~4 weeks from the due-date of the proposal, you should include a set of tasks for every week.
-Resources
-List what resources, e.g. books, papers and/or online resources that are references for your project. List the computing platform, hardware and software resources that you will use for your project. You have a wide latitude here to use what you have access to, but be aware that you will have to support and trouble-shoot on your platform yourselves. If you are starting from an existing piece of code or system, describe and provide a pointer to it here. -->
-</div>
-</body>
